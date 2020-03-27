@@ -22,7 +22,7 @@ const Login = props => {
     setIsLoading(true);
     axios.post('http://localhost:5000/api/login', credentials)
     .then(res => {
-      console.log('Login Response', res);
+      // console.log('Login Response', res);
       window.localStorage.setItem('token', JSON.stringify(res.data.payload));
       setIsLoading(false);
     }).catch(err => console.error(err));
