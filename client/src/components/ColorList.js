@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 import {axiosWithAuth} from '../utils/axiosWithAuth';
 
 const initialColor = {
@@ -12,6 +13,7 @@ const ColorList = ({ colors, updateColors }) => {
   const [colorToEdit, setColorToEdit] = useState(initialColor);
   const [adding, setAdding] = useState(false);
   const [newColor, setNewColor] = useState(initialColor);
+  const { go } = useHistory()
 
   const editColor = color => {
     setEditing(true);
@@ -26,24 +28,19 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
     .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
     .then(res => {
-      updateColors(colors.map(c => {
-        if(`${c.id}` === colorToEdit.id){
-          return colorToEdit
-        }
-        return c
-      }))
       alert(`${colorToEdit.color} updated successfully`);
       setEditing(false);
+      go(0)
     }).catch(err => console.error(err));
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
     axiosWithAuth()
-    .delete(`http://localhost:5000/api/colors/${colorToEdit.id}`)
+    .delete(`http://localhost:5000/api/colors/${color.id}`)
     .then(res => {
-      updateColors(colors.filter(c => `${c.id}` !== colorToEdit.id))
-      alert(colorToEdit.color, ' deleted successfully')
+      console.log(`${color.color} deleted successfully`)
+      go(0);
     }).catch(err => console.error(err));
   };
 
@@ -51,8 +48,8 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
     .post('http://localhost:5000/api/colors', newColor)
     .then(res => {
-      updateColors(res.data);
       setAdding(false);
+      go(0);
       alert(`${newColor.color} added successfully`)
     }).catch(err => console.error(err));
   }
