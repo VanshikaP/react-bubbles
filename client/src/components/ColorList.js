@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import {axiosWithAuth} from '../utils/axiosWithAuth';
 
 const initialColor = {
@@ -26,31 +26,30 @@ const ColorList = ({ colors, updateColors }) => {
     // think about where will you get the id from...
     // where is is saved right now?
     axiosWithAuth()
-    .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+    .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
     .then(res => {
-      alert(`${colorToEdit.color} updated successfully`);
+      console.log(`${colorToEdit.color} updated successfully`);
       setEditing(false);
-      go(0)
+      go()
     }).catch(err => console.error(err));
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
     axiosWithAuth()
-    .delete(`http://localhost:5000/api/colors/${color.id}`)
+    .delete(`/api/colors/${color.id}`)
     .then(res => {
       console.log(`${color.color} deleted successfully`)
-      go(0);
+      go();
     }).catch(err => console.error(err));
   };
 
   const addColor = () => {
+    console.log('***', newColor);
     axiosWithAuth()
-    .post('http://localhost:5000/api/colors', newColor)
+    .post('/api/colors', newColor)
     .then(res => {
       setAdding(false);
-      go(0);
-      alert(`${newColor.color} added successfully`)
     }).catch(err => console.error(err));
   }
 
@@ -105,7 +104,7 @@ const ColorList = ({ colors, updateColors }) => {
               value={newColor.code.hex}
             />
           </label>
-          <button className='add btn' onClick={addColor}>Add</button>
+          <button className='add btn'>Add</button>
         </form>
       )}
       {editing && (
